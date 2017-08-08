@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="commons">
+
+	<property name="ssh.server"         value="ec2-...amazonaws.com" />
+	<property name="ssh.user"           value="hadoop" />
+	<property name="ssh.pass"           value="" />
+	<property name="ssh.key"            value="C:/pbl/workspace/posmining/pem/esip.pem" />
+	<property name="build.path"         value="./build" />
+	<property name="hadoop.path"        value="C:/pbl/hadoop" />
+	<property name="hadoop.lib.path"    value="C:/pbl/hadoop/share/lib" />
+	<property name="hadoop.server.path" value="/usr/bin/hadoop" />
+	<property name="s3.path"            value="s3://esip-bigdata/posdata/" />
+
+</project>
