@@ -10,30 +10,30 @@ import org.apache.hadoop.io.Text;
  * @author shin
  *
  */
-public class ESKV extends Text {
-	public ESKV() {
+public class Var extends Text {
+	public Var() {
 		super();
 	}
-	public ESKV(String v) {
+	public Var(String v) {
 		super(v);
 	}
-	public ESKV(int v) {
+	public Var(int v) {
 		super(String.valueOf(v));
 	}
-	public ESKV(long v) {
+	public Var(long v) {
 		super(String.valueOf(v));
 	}
-	public ESKV(float v) {
+	public Var(float v) {
 		super(String.valueOf(v));
 	}
 
-	public ESKV(Integer v) {
+	public Var(Integer v) {
 		super(String.valueOf(v.intValue()));
 	}
-	public ESKV(Long v) {
+	public Var(Long v) {
 		super(String.valueOf(v.longValue()));
 	}
-	public ESKV(Double v) {
+	public Var(Double v) {
 		super(String.valueOf(v.doubleValue()));
 	}
 

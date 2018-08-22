@@ -2,7 +2,7 @@
 
 <project name="commons">
 
-	<property name="ssh.server"         value="ec2-...amazonaws.com" />
+	<property name="ssh.server"         value="ec2-...compute.amazonaws.com" />
 	<property name="ssh.user"           value="hadoop" />
 	<property name="ssh.pass"           value="" />
 	<property name="ssh.key"            value="./pem/esip.pem" />

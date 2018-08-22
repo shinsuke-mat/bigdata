@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-import posmining.utils.ESKV;
+import posmining.utils.Var;
 import posmining.utils.PosUtils;
 
 /**
@@ -40,10 +40,10 @@ public class OnigiriCount {
 		job.setOutputFormatClass(TextOutputFormat.class);
 
 		// MapperとReducerの出力の型を指定
-		job.setMapOutputKeyClass(ESKV.class);
-		job.setMapOutputValueClass(ESKV.class);
-		job.setOutputKeyClass(ESKV.class);
-		job.setOutputValueClass(ESKV.class);
+		job.setMapOutputKeyClass(Var.class);
+		job.setMapOutputValueClass(Var.class);
+		job.setOutputKeyClass(Var.class);
+		job.setOutputValueClass(Var.class);
 
 		// 入出力ファイルを指定
 		String inputpath = "posdata/*.csv";
@@ -59,7 +59,7 @@ public class OnigiriCount {
 		PosUtils.deleteOutputDir(outputpath);
 
 		// Reducerで使う計算機数を指定
-		job.setNumReduceTasks(5);
+		job.setNumReduceTasks(4);
 
 		// MapReduceジョブを投げ，終わるまで待つ．
 		job.waitForCompletion(true);
@@ -67,7 +67,7 @@ public class OnigiriCount {
 
 
 	// Mapperクラスのmap関数を定義
-	public static class MyMapper extends Mapper<LongWritable, Text, ESKV, ESKV> {
+	public static class MyMapper extends Mapper<LongWritable, Text, Var, Var> {
 		protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
 			// csvファイルをカンマで分割して，配列に格納する
@@ -82,23 +82,23 @@ public class OnigiriCount {
 			String count = csv[PosUtils.ITEM_COUNT];
 
 			// emitする （emitデータはCSKVオブジェクトに変換すること）
-			context.write(new ESKV("onigiri"), new ESKV(count));
+			context.write(new Var("onigiri"), new Var(count));
 		}
 	}
 
 
 	// Reducerクラスのreduce関数を定義
-	public static class MyReducer extends Reducer<ESKV, ESKV, ESKV, ESKV> {
-		protected void reduce(ESKV key, Iterable<ESKV> values, Context context) throws IOException, InterruptedException {
+	public static class MyReducer extends Reducer<Var, Var, Var, Var> {
+		protected void reduce(Var key, Iterable<Var> values, Context context) throws IOException, InterruptedException {
 
 			// 売り上げを合計
 			int count = 0;
-			for (ESKV value : values) {
+			for (Var value : values) {
 				count += value.toInt();
 			}
 
 			// emit
-			context.write(key, new ESKV(count));
+			context.write(key, new Var(count));
 		}
 	}
 }

@@ -2,58 +2,69 @@
 
 <project>
 
-	<!-- 各メンバー固有のプロパティファイルの読み込み -->
-	<import file="build-common.xml" />
+  <!-- 共通プロパティファイルの読み込み -->
+  <import file="build-common.xml" />
 
-	<!-- おにぎり総数 -->
-	<target name="run.OnigiriCount" depends="prepare">
-		<sshexec host="${ssh.server}" username="${ssh.user}" keyfile="${ssh.key}" trust="yes"
-			command="hadoop jar main.jar posmining.enshu.OnigiriCount ${s3.path}"
-		/>
-		<sshexec host="${ssh.server}" username="${ssh.user}" keyfile="${ssh.key}" trust="yes"
-			command="hadoop fs -cat /user/hadoop/out/onigiriCount/part*"
-		/>
-	</target>
+  <!-- おにぎり総数 -->
+  <target name="run.OnigiriCount" depends="prepare">
+    <sshexec host="${ssh.server}"
+             username="${ssh.user}"
+             keyfile="${ssh.key}"
+             trust="yes"
+             command="hadoop jar main.jar posmining.enshu.OnigiriCount ${s3.path}" />
+    <sshexec host="${ssh.server}"
+             username="${ssh.user}"
+             keyfile="${ssh.key}"
+             trust="yes"
+             command="hadoop fs -cat /user/hadoop/out/onigiriCount/part*" />
+  </target>
 
-	<!-- クラスタ実行のための準備タスク．プロジェクトをビルドしてJARに固めてSCPで送信する -->
-	<target name="prepare">
-		<delete dir="${build.path}" />
-		<mkdir dir="${build.path}" />
+  <!-- クラスタ実行のための準備タスク．プロジェクトをビルドしてJARに固めてSCPで送信する -->
+  <target name="prepare">
+    <delete dir="${build.path}" />
+    <mkdir dir="${build.path}" />
 
-		<path id="build.class.path">
-			<fileset dir="${hadoop.path}">
-				<include name="*.jar" />
-			</fileset>
-			<!-- fileset dir="${hadoop.lib.path}">
-				<include name="*.jar" />
-			</fileset -->
-			<fileset dir="C:/pbl/hadoop/share/hadoop/common"><include name="*.jar" /></fileset>
-			<fileset dir="C:/pbl/hadoop/share/hadoop/common/lib"><include name="*.jar" /></fileset>
-			<fileset dir="C:/pbl/hadoop/share/hadoop/hdfs"><include name="*.jar" /></fileset>
-			<fileset dir="C:/pbl/hadoop/share/hadoop/mapreduce"><include name="*.jar" /></fileset>
-			<fileset dir="C:/pbl/hadoop/share/hadoop/yarn"><include name="*.jar" /></fileset>
+    <path id="build.class.path">
+      <fileset dir="${hadoop.path}">
+        <include name="*.jar" />
+      </fileset>
 
-		</path>
+      <fileset dir="C:/pbl/hadoop/share/hadoop/common">
+        <include name="*.jar" />
+      </fileset>
+      <fileset dir="C:/pbl/hadoop/share/hadoop/common/lib">
+        <include name="*.jar" />
+      </fileset>
+      <fileset dir="C:/pbl/hadoop/share/hadoop/hdfs">
+        <include name="*.jar" />
+      </fileset>
+      <fileset dir="C:/pbl/hadoop/share/hadoop/mapreduce">
+        <include name="*.jar" />
+      </fileset>
+      <fileset dir="C:/pbl/hadoop/share/hadoop/yarn">
+        <include name="*.jar" />
+      </fileset>
+    </path>
 
-		<javac
-			encoding="utf-8"
-			srcdir="src"
-			destdir="${build.path}"
-			compiler="javac1.7"
-			source="1.7"
-			target="1.7"
-			includeantruntime="false"
-			debug="true">
-			<classpath refid="build.class.path" />
-			<compilerarg value="-Xlint:-options"/>
-		</javac>
+    <javac encoding="utf-8"
+           srcdir="src"
+           destdir="${build.path}"
+           compiler="javac1.8"
+           source="1.8"
+           target="1.8"
+           includeantruntime="false"
+           debug="true">
 
-		<jar basedir="${build.path}" destfile="main.jar"/>
+      <classpath refid="build.class.path" />
+      <compilerarg value="-Xlint:-options" />
+    </javac>
 
-		<scp file="main.jar"
-			todir="${ssh.user}:${ssh.pass}@${ssh.server}:~/."
-			keyfile="${ssh.key}"
-			trust = "yes" />
-	</target>
+    <jar basedir="${build.path}" destfile="${build.path}/main.jar" />
+
+    <scp file="${build.path}/main.jar"
+         todir="${ssh.user}:${ssh.pass}@${ssh.server}:~/."
+         keyfile="${ssh.key}"
+         trust="yes" />
+  </target>
 
 </project>
