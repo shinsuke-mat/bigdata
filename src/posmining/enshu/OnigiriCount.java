@@ -81,7 +81,7 @@ public class OnigiriCount {
 			// valueとなる販売個数を取得
 			String count = csv[PosUtils.ITEM_COUNT];
 
-			// emitする （emitデータはCSKVオブジェクトに変換すること）
+			// emitする （emitデータはVarオブジェクトに変換すること）
 			context.write(new Var("onigiri"), new Var(count));
 		}
 	}
